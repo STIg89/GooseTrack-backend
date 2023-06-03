@@ -4,6 +4,9 @@ const mongoose = require('mongoose');
 
 const { PORT = 4000, DB_HOST, BASE_URL } = process.env;
 
+mongoose.set('strictQuery', true);
+mongoose.Promise = global.Promise;
+
 mongoose
   .connect(DB_HOST)
   .then(() => {
