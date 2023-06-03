@@ -5,7 +5,9 @@ const cors = require('cors');
 const app = express();
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
+
 const authRouter = require('./routes/api/auth');
+const tasksRouter = require('./routes/api/tasks')
 
 app.use(logger(formatsLogger));
 app.use(cors());
@@ -14,6 +16,8 @@ app.use(express.json());
 app.use(express.static('public'));
 
 app.use('/api/auth', authRouter);
+
+app.use('/api', tasksRouter)
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });
