@@ -1,9 +1,19 @@
-const { registrationSchema, loginSchema, emailSchema } = require('./user');
+const {
+  registrationSchema,
+  loginSchema,
+  emailSchema,
+  updateUserSchema,
+} = require('./user');
 const { createTaskValidation, updateTaskValidation } = require('./taskValidationSchema')
+const { reveiwSchema, updateRewSchema } = require('./review');
+
 module.exports = {
   registrationSchema,
   loginSchema,
   emailSchema,
   createTaskValidation,
-  updateTaskValidation
+  updateTaskValidation,
+  updateUserSchema,
+  reveiwSchema,
+  updateRewSchema,
 };

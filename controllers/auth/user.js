@@ -9,7 +9,7 @@ const { nanoid } = require('nanoid');
 const EmailVerifycation = { status: true, title: 'verifycation' };
 const { User } = require('../../models/user');
 const { HttpError, ctrlWrapper, sendEmail } = require('../../helpers');
-const { BASE_URL, PORT } = process.env;
+const { BASE_URL } = process.env;
 
 const avatarDir = path.join(__dirname, '../', '../', 'public', 'avatars');
 
@@ -109,12 +109,22 @@ const login = async (req, res) => {
   res.status(200).json({
     status: 'success',
     code: 200,
-    data: token,
+    token: token,
   });
 };
 //------------------------------current-----------------------------------------------------
 const current = async (req, res) => {
-  const { name, email, avatarURL } = req.user;
+  const {
+    name,
+    email,
+    avatarURL,
+    birthday,
+    phone,
+    skype,
+    createdAt,
+    updatedAt,
+  } = req.user;
+
   res.status(200).json({
     status: 'success',
     code: 200,
@@ -122,6 +132,11 @@ const current = async (req, res) => {
       name: name,
       email: email,
       avatarURL: avatarURL,
+      birthday: birthday,
+      phone: phone,
+      skype: skype,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
     },
   });
 };
@@ -133,10 +148,20 @@ const logout = async (req, res) => {
   res.status(204).json();
 };
 //----------------------------------update-avatar------------------------------------------
-const updateAvatar = async (req, res) => {
+const updateUser = async (req, res) => {
   console.log('update');
   const { _id } = req.user;
-  const updatedUser = req.user;
+  let updatedUser = {};
+
+  if (req.body) {
+    if (req.body.password) {
+      const hashPassword = await bcrypt.hash(req.body.password, 10);
+      updatedUser = { ...req.body, password: hashPassword };
+    } else {
+      updatedUser = { ...req.body };
+    }
+  }
+
   if (req.file) {
     const { path: tempUpload, originalname } = req.file;
     const fileName = `${_id}_${originalname}`;
@@ -156,20 +181,25 @@ const updateAvatar = async (req, res) => {
     // console.log(fileName);
     const avatarURL = path.join('avatars', fileName);
     console.log(avatarURL);
-
-    updatedUser.avatarURL = avatarURL;
+    updatedUser = { ...updatedUser, avatarURL };
+    await User.findByIdAndUpdate(_id, { avatarURL: avatarURL });
   }
   console.log('body');
   console.log(req.body);
   console.log('');
-  //await User.findByIdAndUpdate(_id, { avatarURL: avatarURL });
-  if (req.body) {
+
+  console.log('updatedUser');
+  console.log(updatedUser);
+
+  await User.findByIdAndUpdate(_id, { ...updatedUser });
+  if (req.body.password) {
+    updatedUser = { ...updatedUser, password: req.body.password };
   }
 
   res.status(200).json({
     status: 'success',
     code: 200,
-    data: { avatarURL: `${avatarURL}` },
+    data: { updatedUser },
   });
 };
 //=======================================================================================
@@ -179,7 +209,7 @@ module.exports = {
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(current),
   logout: ctrlWrapper(logout),
-  updateAvatar: ctrlWrapper(updateAvatar),
+  updateUser: ctrlWrapper(updateUser),
   verifyEmail: ctrlWrapper(verifyEmail),
   resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
 };
