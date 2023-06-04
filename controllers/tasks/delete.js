@@ -1,9 +1,14 @@
 const Task = require('../../models/task')
+const { HttpError, ctrlWrapper } = require('../../helpers');
 
 const deleteById = async (req, res) => {
     const { id } = req.params
-    await Task.findByIdAndDelete(id)
-    res.json({ message: 'Delete success' })
+    const { _id: owner } = req.user;
+    const result = await Task.findOneAndDelete({ _id: id, owner });
+    if (!result) {
+        throw HttpError(404);
+    }
+    res.json({ message: 'Deleted successfully!' });
 }
 
-module.exports = deleteById
+module.exports = ctrlWrapper(deleteById)

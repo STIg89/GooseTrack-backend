@@ -18,7 +18,7 @@ app.use(express.static('public'));
 
 app.use('/api/auth', authRouter);
 
-app.use('/api', tasksRouter);
+app.use('/api/tasks', tasksRouter)
 
 app.use('/api/reviews', reviewRouter);
 

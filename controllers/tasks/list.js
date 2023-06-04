@@ -1,7 +1,12 @@
 const Task = require("../../models/task")
+const { ctrlWrapper, HttpError } = require('../../helpers')
 
 const listPerMonth = async (req, res) => {
-    const { month } = req.query; // Assuming the month is passed as a query parameter
+    const { month, page = 1, limit = 1 } = req.query;
+    if (month > 12 || month < 0) {
+        throw HttpError(400, 'Wrong month. Min value - 1, max - 12')
+    }
+    const { _id: owner } = req.user;
     const tasks = await Task.aggregate([
         {
             $addFields: {
@@ -10,12 +15,14 @@ const listPerMonth = async (req, res) => {
         },
         {
             $match: {
-                month: Number(month)
+                month: Number(month),
+                owner: owner
             }
         }
-    ]);
-
+    ]).limit(limit * 1)
+        .skip((page - 1) * limit)
+        .exec();
     res.json(tasks);
 }
 
-module.exports = listPerMonth
+module.exports = ctrlWrapper(listPerMonth)
