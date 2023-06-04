@@ -17,7 +17,7 @@ app.use(express.static('public'));
 
 app.use('/api/auth', authRouter);
 
-app.use('/api', tasksRouter)
+app.use('/api/tasks', tasksRouter)
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });

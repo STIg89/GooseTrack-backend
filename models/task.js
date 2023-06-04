@@ -28,11 +28,11 @@ const taskSchema = Schema(
             default: 'to-do',
             trim: true,
         },
-        // owner: {
-        //   type: Schema.Types.ObjectId,
-        //   ref: 'user',
-        //   required: true,
-        // },
+        owner: {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+            required: true,
+        },
 
     }, { versionKey: false, timestamps: true }
 );
