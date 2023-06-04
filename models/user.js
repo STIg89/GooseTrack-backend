@@ -33,15 +33,21 @@ const userSchema = new Schema(
       required: [true, 'Email is required'],
       unique: true,
     },
+    birthday: {
+      type: Date,
+      default: Date.now,
+    },
     phone: {
       type: String,
       match: PHONE_REGEXP,
+      default: null,
     },
     skype: {
       maxLength: [16, 'maximum 16 symbols'],
       type: String,
+      default: null,
     },
-    token: String,
+    token: { type: String, default: '' },
     avatarURL: {
       type: String,
     },

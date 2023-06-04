@@ -1,6 +1,4 @@
 //h 12 to s 60s*60m*12
-
-const { time } = require('console');
 const { HttpError } = require('../helpers');
 
 const validateBody = schema => {

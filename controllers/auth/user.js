@@ -6,10 +6,10 @@ const fs = require('fs/promises');
 const Jimp = require('jimp');
 const { nanoid } = require('nanoid');
 
-const EmailVerifycation = { status: false };
+const EmailVerifycation = { status: true, title: 'verifycation' };
 const { User } = require('../../models/user');
 const { HttpError, ctrlWrapper, sendEmail } = require('../../helpers');
-const { BASE_URL } = process.env;
+const { BASE_URL, PORT } = process.env;
 
 const avatarDir = path.join(__dirname, '../', '../', 'public', 'avatars');
 
@@ -30,11 +30,11 @@ const registration = async (req, res) => {
     avatarURL,
     verificationToken: verifycationCode,
   });
-  if (EmailVerifycation.status) {
+  if (EmailVerifycation.status == true) {
     await sendEmail(
       req.body.email,
-      'verifycation',
-      `<a target="_blanck" href="${BASE_URL}/api/users/verify/${verifycationCode}"> verify your email - click here <a/>`
+      EmailVerifycation.title,
+      `<a target="_blanck" href="${BASE_URL}:${PORT}/api/auth/verify/${verifycationCode}"> verify your email - click here <a/>`
     );
   }
 
@@ -75,8 +75,8 @@ const resendVerifyEmail = async (req, res) => {
 
   await sendEmail(
     email,
-    'verifycation',
-    `<a target="_blanck" href="${BASE_URL}/api/users/verify/${user.verificationToken}"> verify your email - click here <a/>`
+    EmailVerifycation.title,
+    `<a target="_blanck" href="${BASE_URL}:${PORT}/api/auth/verify/${user.verificationToken}"> verify your email - click here <a/>`
   );
 
   res.status(200).json({
@@ -114,14 +114,14 @@ const login = async (req, res) => {
 };
 //------------------------------current-----------------------------------------------------
 const current = async (req, res) => {
-  const { name, email, subscription } = req.user;
+  const { name, email, avatarURL } = req.user;
   res.status(200).json({
     status: 'success',
     code: 200,
     data: {
       name: name,
       email: email,
-      subscription: subscription,
+      avatarURL: avatarURL,
     },
   });
 };
@@ -134,31 +134,42 @@ const logout = async (req, res) => {
 };
 //----------------------------------update-avatar------------------------------------------
 const updateAvatar = async (req, res) => {
+  console.log('update');
   const { _id } = req.user;
-  const { path: tempUpload, originalname } = req.file;
-  const fileName = `${_id}_${originalname}`;
-  const resultUpload = path.join(avatarDir, fileName);
-  console.log(tempUpload);
-  Jimp.read(tempUpload)
-    .then(avatar => {
-      return avatar
-        .resize(250, 250) // resize
-        .write(resultUpload); // save
-    })
-    .catch(err => {
-      console.error(err);
-    });
+  const updatedUser = req.user;
+  if (req.file) {
+    const { path: tempUpload, originalname } = req.file;
+    const fileName = `${_id}_${originalname}`;
+    const resultUpload = path.join(avatarDir, fileName);
 
-  await fs.unlink(tempUpload);
+    Jimp.read(tempUpload)
+      .then(avatar => {
+        return avatar
+          .resize(250, 250) // resize
+          .write(resultUpload); // save
+      })
+      .catch(err => {
+        console.error(err);
+      });
 
-  const avatarURL = path.join('avatars', fileName);
+    await fs.unlink(tempUpload);
+    // console.log(fileName);
+    const avatarURL = path.join('avatars', fileName);
+    console.log(avatarURL);
 
-  await User.findByIdAndUpdate(_id, { avatarURL });
+    updatedUser.avatarURL = avatarURL;
+  }
+  console.log('body');
+  console.log(req.body);
+  console.log('');
+  //await User.findByIdAndUpdate(_id, { avatarURL: avatarURL });
+  if (req.body) {
+  }
 
   res.status(200).json({
     status: 'success',
     code: 200,
-    data: { avatarURL: avatarURL },
+    data: { avatarURL: `${avatarURL}` },
   });
 };
 //=======================================================================================
