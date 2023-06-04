@@ -16,11 +16,11 @@ router.post(
   userCtrl.registration
 );
 
-router.post('/login', validateBody(loginSchema), userCtrl.login);
+router.post('/login', validateBody(loginSchema), userCtrl.login); //логінимось
 
-router.get('/verify/:verificationToken', userCtrl.verifyEmail);
+router.get('/verify/:verificationToken', userCtrl.verifyEmail); //верефікація пошти
 
-router.post('/verify', validateBody(emailSchema));
+router.post('/verify', validateBody(emailSchema), userCtrl.resendVerifyEmail);
 
 router.get('/current', authenticate, userCtrl.getCurrent);
 

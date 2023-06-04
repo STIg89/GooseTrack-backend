@@ -1,19 +1,20 @@
-const sendGridEmail = require("@sendgrid/mail");
-require("dotenv").config();
-const { EMAIL_SENDER_KEY } = process.env;
+const sendGridEmail = require('@sendgrid/mail');
+require('dotenv').config();
+const { SENDGRID_API_KEY, EMAIL } = process.env;
 
-sendGridEmail.setApiKey(EMAIL_SENDER_KEY);
+sendGridEmail.setApiKey(SENDGRID_API_KEY);
 
 const sendEmail = async (receiverEmail, subject, letter) => {
-	const email = {
-		to: receiverEmail,
-		from: "andruha0013@gmail.com",
-		subject: subject,
-		html: letter,
-	};
-
-	await sendGridEmail.send(email);
-	return true;
+  console.log();
+  const email = {
+    to: receiverEmail,
+    from: EMAIL,
+    subject: subject,
+    html: letter,
+  };
+  console.log(email);
+  await sendGridEmail.send(email);
+  return true;
 };
 
 module.exports = sendEmail;
