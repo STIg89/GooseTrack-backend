@@ -5,6 +5,7 @@ const {
   registrationSchema,
   loginSchema,
   emailSchema,
+  updateUserSchema,
 } = require('../../schemas');
 
 //console.log(userCtrl);
@@ -27,10 +28,11 @@ router.get('/current', authenticate, userCtrl.getCurrent);
 router.post('/logout', authenticate, userCtrl.logout);
 
 router.patch(
-  '/avatar',
+  '/user',
   authenticate,
   uploder.single('avatar'),
-  userCtrl.updateAvatar
+  validateBody(updateUserSchema),
+  userCtrl.updateUser
 );
 
 module.exports = router;

@@ -22,6 +22,15 @@ const registrationSchema = Joi.object({
   token: Joi.string().default(''),
 });
 
+const updateUserSchema = Joi.object({
+  name: Joi.string().max(16),
+  email: Joi.string().pattern(EMAIL_REGEXP),
+  password: Joi.string().pattern(PASSWORD_REGEXP),
+  birthday: Joi.date().format('YYYY-MM-DD').optional(),
+  phone: Joi.string().min(3).max(20).pattern(PHONE_REGEXP).optional(),
+  skype: Joi.string().max(16),
+});
+
 const loginSchema = Joi.object({
   email: Joi.string().pattern(EMAIL_REGEXP).required(),
   password: Joi.string().pattern(PASSWORD_REGEXP).required(),
@@ -35,4 +44,5 @@ module.exports = {
   registrationSchema,
   loginSchema,
   emailSchema,
+  updateUserSchema,
 };

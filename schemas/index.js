@@ -1,7 +1,13 @@
-const { registrationSchema, loginSchema, emailSchema } = require('./user');
+const {
+  registrationSchema,
+  loginSchema,
+  emailSchema,
+  updateUserSchema,
+} = require('./user');
 
 module.exports = {
   registrationSchema,
   loginSchema,
   emailSchema,
+  updateUserSchema,
 };
