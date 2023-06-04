@@ -34,7 +34,7 @@ const registration = async (req, res) => {
     await sendEmail(
       req.body.email,
       EmailVerifycation.title,
-      `<a target="_blanck" href="${BASE_URL}:${PORT}/api/auth/verify/${verifycationCode}"> verify your email - click here <a/>`
+      `<a target="_blanck" href="${BASE_URL}/api/auth/verify/${verifycationCode}"> verify your email - click here <a/>`
     );
   }
 
@@ -76,7 +76,7 @@ const resendVerifyEmail = async (req, res) => {
   await sendEmail(
     email,
     EmailVerifycation.title,
-    `<a target="_blanck" href="${BASE_URL}:${PORT}/api/auth/verify/${user.verificationToken}"> verify your email - click here <a/>`
+    `<a target="_blanck" href="${BASE_URL}/api/auth/verify/${user.verificationToken}"> verify your email - click here <a/>`
   );
 
   res.status(200).json({
