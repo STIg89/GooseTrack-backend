@@ -9,7 +9,7 @@ const { nanoid } = require('nanoid');
 const EmailVerifycation = { status: true, title: 'verifycation' };
 const { User } = require('../../models/user');
 const { HttpError, ctrlWrapper, sendEmail } = require('../../helpers');
-const { BASE_URL, PORT } = process.env;
+const { BASE_URL } = process.env;
 
 const avatarDir = path.join(__dirname, '../', '../', 'public', 'avatars');
 
