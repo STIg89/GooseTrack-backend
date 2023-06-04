@@ -109,7 +109,7 @@ const login = async (req, res) => {
   res.status(200).json({
     status: 'success',
     code: 200,
-    data: token,
+    token: token,
   });
 };
 //------------------------------current-----------------------------------------------------
