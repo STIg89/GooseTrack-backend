@@ -18,7 +18,7 @@ app.use(express.static('public'));
 
 app.use('/api/auth', authRouter);
 
-app.use('/api/tasks', tasksRouter)
+app.use('/api/tasks', tasksRouter);
 
 app.use('/api/reviews', reviewRouter);
 
@@ -27,7 +27,8 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message });
+  const { status = 500, message = 'server error' } = err;
+  res.status(status).json({ message: err.message });
 });
 
 module.exports = app;
