@@ -27,7 +27,7 @@ const updateUserSchema = Joi.object({
   email: Joi.string().pattern(EMAIL_REGEXP),
   password: Joi.string().pattern(PASSWORD_REGEXP),
   birthday: Joi.date().format('YYYY-MM-DD').optional(),
-  phone: Joi.string().min(3).max(20).pattern(PHONE_REGEXP).optional(),
+  phone: Joi.string().max(20).pattern(PHONE_REGEXP).optional(),
   skype: Joi.string().max(16),
 });
 
