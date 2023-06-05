@@ -4,7 +4,7 @@ const {
   emailSchema,
   updateUserSchema,
 } = require('./user');
-const { createTaskValidation, updateTaskValidation } = require('./taskValidationSchema')
+const { createTaskValidation, updateTaskValidation, listTasksPerMonth } = require('./taskValidationSchema')
 const { reveiwSchema, updateRewSchema } = require('./review');
 
 module.exports = {
@@ -16,4 +16,5 @@ module.exports = {
   updateUserSchema,
   reveiwSchema,
   updateRewSchema,
+  listTasksPerMonth
 };

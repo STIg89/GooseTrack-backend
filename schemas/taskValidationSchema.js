@@ -17,4 +17,11 @@ const updateTaskValidation = Joi.object({
     date: Joi.date().iso(),
     category: Joi.string().valid('to-do', 'in-progress', 'done')
 })
-module.exports = { createTaskValidation, updateTaskValidation }
+const listTasksPerMonth = Joi.object({
+    month: Joi.number().integer().min(1).max(12).error(new Error('Wrong month. Min value - 1, max - 12')).required(),
+    day: Joi.number().integer().min(1).max(31).error(new Error('Invalid day.')),
+    year: Joi.number().integer().min(1900).max(2222),
+    page: Joi.number().integer().min(1),
+    limit: Joi.number().integer().min(1)
+});
+module.exports = { createTaskValidation, updateTaskValidation, listTasksPerMonth }
