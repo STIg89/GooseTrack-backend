@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
 const tasksController = require('../../controllers/tasks')
-const { validateBody, authenticate } = require('../../middlewares');
+const { validateBody, authenticate, validateQuery } = require('../../middlewares');
 
 const schema = require('../../schemas')
 
-router.get('', authenticate, tasksController.listPerMonth)
+router.get('', authenticate, validateQuery(schema.listTasksPerMonth), tasksController.listPerMonth)
 
 router.post('', authenticate, validateBody(schema.createTaskValidation), tasksController.create)
 
