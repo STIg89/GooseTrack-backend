@@ -3,7 +3,7 @@ const { ctrlWrapper, HttpError } = require('../../helpers')
 
 const listPerMonth = async (req, res) => {
 
-    const { month, day, year, page = 1, limit = 2 } = req.query;
+    const { month, day, year, page = 1, limit = 100 } = req.query;
     if (month > 12 || month < 0) {
         throw HttpError(400, 'Wrong month. Min value - 1, max - 12')
     }
