@@ -24,6 +24,8 @@ router.post(
 
 router.post('/login', validateBody(loginSchema), userCtrl.login); //логінимось
 
+router.get('/login/:token', userCtrl.loginWithToken);
+
 router.get('/verify/:verificationToken', userCtrl.verifyEmail); //верефікація пошти
 
 router.post('/verify', validateBody(emailSchema), userCtrl.resendVerifyEmail);
