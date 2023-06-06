@@ -1,6 +1,11 @@
 const express = require('express');
 const userCtrl = require('../../controllers/auth/user');
-const { validateBody, authenticate, uploder } = require('../../middlewares');
+const {
+  validateBody,
+  authenticate,
+  uploder,
+  uploadCloud,
+} = require('../../middlewares');
 const {
   registrationSchema,
   loginSchema,
@@ -32,7 +37,15 @@ router.patch(
   authenticate,
   uploder.single('avatar'),
   validateBody(updateUserSchema),
-  userCtrl.updateUser
+  userCtrl.updateUserCloud
+);
+
+router.put(
+  '/user',
+  authenticate,
+  uploadCloud.single('avatar'),
+  validateBody(updateUserSchema),
+  userCtrl.updateUserCloud
 );
 
 module.exports = router;

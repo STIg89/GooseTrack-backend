@@ -50,6 +50,11 @@ const userSchema = new Schema(
     token: { type: String, default: '' },
     avatarURL: {
       type: String,
+      default: '',
+    },
+    avatarID: {
+      type: String,
+      default: '',
     },
     verify: {
       type: Boolean,

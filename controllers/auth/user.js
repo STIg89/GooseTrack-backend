@@ -6,6 +6,8 @@ const fs = require('fs/promises');
 const Jimp = require('jimp');
 const { nanoid } = require('nanoid');
 
+const { cloudinary } = require('../../middlewares');
+
 const EmailVerifycation = { status: true, title: 'verifycation' };
 const { User } = require('../../models/user');
 const { HttpError, ctrlWrapper, sendEmail } = require('../../helpers');
@@ -21,13 +23,12 @@ const registration = async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(req.body.password, 10);
-  const avatarURL = gravatar.url(req.body.email);
+  //const avatarURL = gravatar.url(req.body.email);
   const verifycationCode = nanoid();
 
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
-    avatarURL,
     verificationToken: verifycationCode,
   });
   if (EmailVerifycation.status == true) {
@@ -147,7 +148,7 @@ const logout = async (req, res) => {
   await User.findByIdAndUpdate(_id, { token: '' });
   res.status(204).json();
 };
-//----------------------------------update-avatar------------------------------------------
+//----------------------------------update-------------------------------------------
 const updateUser = async (req, res) => {
   console.log('update');
   const { _id } = req.user;
@@ -202,6 +203,54 @@ const updateUser = async (req, res) => {
     data: { updatedUser },
   });
 };
+//================================NEW=UPDATE======================================================
+const updateUserTwo = async (req, res) => {
+  console.log('update');
+  const { _id } = req.user;
+  let updatedUser = {};
+
+  if (req.body) {
+    if (req.body.password) {
+      const hashPassword = await bcrypt.hash(req.body.password, 10);
+      updatedUser = { ...req.body, password: hashPassword };
+    } else {
+      updatedUser = { ...req.body };
+    }
+  }
+
+  if (req.file) {
+    console.log(req.file);
+    const { path: tempUpload, originalname } = req.file;
+    const fileName = `${_id}_${originalname}`;
+
+    const avatarURL = req.file.path;
+    const avatarID = req.file.filename;
+    if (req.user.avatarID) {
+      await cloudinary.uploader.destroy(req.user.avatarID);
+    }
+    console.log(avatarURL);
+    updatedUser = { ...updatedUser, avatarURL, avatarID };
+    await User.findByIdAndUpdate(_id, { avatarURL: avatarURL });
+  }
+  console.log('body');
+  console.log(req.body);
+  console.log('');
+
+  console.log('updatedUser');
+  console.log(updatedUser);
+
+  await User.findByIdAndUpdate(_id, { ...updatedUser });
+  if (req.body.password) {
+    updatedUser = { ...updatedUser, password: req.body.password };
+  }
+
+  res.status(200).json({
+    status: 'success',
+    code: 200,
+    data: { updatedUser },
+  });
+};
+
 //=======================================================================================
 
 module.exports = {
@@ -210,6 +259,7 @@ module.exports = {
   getCurrent: ctrlWrapper(current),
   logout: ctrlWrapper(logout),
   updateUser: ctrlWrapper(updateUser),
+  updateUserCloud: ctrlWrapper(updateUserTwo),
   verifyEmail: ctrlWrapper(verifyEmail),
   resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
 };
