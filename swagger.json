@@ -1,0 +1,909 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "version": "1.0.0",
+        "title": "GooseTrack",
+        "description": "Showing off swagger-ui-express",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "consumes": [
+        "application/json",
+        "multipart/form-data"
+    ],
+    "produces": [
+        "application/json",
+        "multipart/form-data"
+    ],
+    "servers": [
+        {
+            "url": "http://localhost:5050"
+        },
+        {
+            "url": "https://goosetrack-backend.onrender.com"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "Authorization endpoints"
+        },
+        {
+            "name": "Tasks",
+            "description": "Tasks endpoints"
+        },
+        {
+            "name": "Reviews",
+            "description": "Reviews endpoints"
+        }
+    ],
+    "paths": {
+        "/api/auth/registration": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "User registration",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "requestBody": {
+                    "description": "Registration's object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RegistrationRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": ""
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "409": {
+                        "description": "Provided email already exists",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "User login",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "requestBody": {
+                    "description": "Registration's object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/loginRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": ""
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "409": {
+                        "description": "Provided email already exists",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/api/auth/verify/{verificationToken}": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Verify user by token",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "verificationToken",
+                        "required": true
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": ""
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "409": {
+                        "description": "Provided email already exists",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/api/auth/verify": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Verify user by token",
+                "parameters": [],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": ""
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "409": {
+                        "description": "Provided email already exists",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/api/auth/current": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Retrieves an info about current user.",
+                "parameters": [],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": ""
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "409": {
+                        "description": "Provided email already exists",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/api/auth/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout.",
+                "parameters": [],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": ""
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "409": {
+                        "description": "Provided email already exists",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/api/tasks": {
+            "get": {
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Returns a list of all tasks by parameters.",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "month",
+                        "required": true,
+                        "example": 7
+                    },
+                    {
+                        "in": "query",
+                        "name": "day"
+                    },
+                    {
+                        "in": "query",
+                        "name": "year"
+                    },
+                    {
+                        "in": "query",
+                        "name": "page"
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": ""
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "409": {
+                        "description": "Provided email already exists",
+                        "content": {}
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Returns a list of all tasks by parameters.",
+                "parameters": [],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "requestBody": {
+                    "description": "Registration's object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/createTaskRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": ""
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "409": {
+                        "description": "Provided email already exists",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/api/tasks/{id}": {
+            "patch": {
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Updates an existing task.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "requestBody": {
+                    "description": "Registration's object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/updateTaskRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": ""
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "409": {
+                        "description": "Provided email already exists",
+                        "content": {}
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Updates an existing task.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": ""
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "409": {
+                        "description": "Provided email already exists",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/api/reviews": {
+            "get": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Returns a list of all reviews.",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "example": 10
+                    },
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "example": 1
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": ""
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "409": {
+                        "description": "Provided email already exists",
+                        "content": {}
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Create a Review.",
+                "parameters": [],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "requestBody": {
+                    "description": "Registration's object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/createReviewRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": ""
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "409": {
+                        "description": "Provided email already exists",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/api/reviews/user": {
+            "get": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Returns a list of all current user reviews.",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "example": 10
+                    },
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "example": 1
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": ""
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "409": {
+                        "description": "Provided email already exists",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/api/reviews/{id}": {
+            "get": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Returns a review by specific ID.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": ""
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "409": {
+                        "description": "Provided email already exists",
+                        "content": {}
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Updates an existing review.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id"
+                    }
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "requestBody": {
+                    "description": "Registration's object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/updateReviewRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": ""
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request (invalid request body)",
+                        "content": {}
+                    },
+                    "409": {
+                        "description": "Provided email already exists",
+                        "content": {}
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "RegistrationRequest": {
+                "type": "object",
+                "required": [
+                    "email",
+                    "password",
+                    "name"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "description": "User's email",
+                        "format": "email"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "User's password",
+                        "example": "qwerty123"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "User's name"
+                    },
+                    "birthday": {
+                        "type": "string",
+                        "description": "Day of birthday in `YYYY-MM-DD` format",
+                        "example": "2000-01-01"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "description": "Phone number"
+                    },
+                    "skype": {
+                        "type": "string",
+                        "description": "Skype"
+                    },
+                    "token": {
+                        "type": "number"
+                    }
+                }
+            },
+            "RegistrationResponse": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "email": {
+                            "type": "string",
+                            "description": "User's email",
+                            "format": "email"
+                        },
+                        "userId": {
+                            "type": "number",
+                            "description": "User's id",
+                            "example": "32143232436545474"
+                        }
+                    }
+                },
+                "example": [
+                    {
+                        "email": "1@gmail.com",
+                        "userId": "1"
+                    },
+                    {
+                        "email": "2@gmail.com",
+                        "userId": "2"
+                    }
+                ]
+            },
+            "loginRequest": {
+                "type": "object",
+                "required": [
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "description": "User's email",
+                        "format": "email"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "User's password",
+                        "example": "qwerty123"
+                    }
+                }
+            },
+            "createTaskRequest": {
+                "type": "object",
+                "required": [
+                    "title",
+                    "start",
+                    "end",
+                    "date",
+                    "priority",
+                    "category"
+                ],
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": "Title of a task.",
+                        "example": "New Task"
+                    },
+                    "start": {
+                        "type": "time",
+                        "description": "Start time. In `HH:mm` format.",
+                        "example": "09:00"
+                    },
+                    "end": {
+                        "type": "time",
+                        "description": "End time. In `HH:mm` format. Must be greater than `start`.",
+                        "example": "17:00"
+                    },
+                    "date": {
+                        "type": "date",
+                        "description": "Day on which to schedule a task. In [ISO 8601 date format](https://en.wikipedia.org/wiki/ISO_8601).",
+                        "example": "2023-07-15"
+                    },
+                    "priority": {
+                        "type": "string",
+                        "description": "Priority of a task. Possible values: `\"low\", \"medium\", \"high\"`",
+                        "enum": [
+                            "low",
+                            "medium",
+                            "high"
+                        ],
+                        "example": "medium"
+                    },
+                    "category": {
+                        "type": "string",
+                        "enum": [
+                            "to-do",
+                            "in-progress",
+                            "done"
+                        ],
+                        "description": "The category of a task. Possible values: `\"to-do\", \"in-progress\", \"done\"`",
+                        "example": "to-do"
+                    }
+                }
+            },
+            "updateTaskRequest": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": "Title of a task.",
+                        "example": "New Task"
+                    },
+                    "start": {
+                        "type": "time",
+                        "description": "Start time. In `HH:mm` format.",
+                        "example": "09:00"
+                    },
+                    "end": {
+                        "type": "time",
+                        "description": "End time. In `HH:mm` format. Must be greater than `start`.",
+                        "example": "17:00"
+                    },
+                    "date": {
+                        "type": "date",
+                        "description": "Day on which to schedule a task. In [ISO 8601 date format](https://en.wikipedia.org/wiki/ISO_8601).",
+                        "example": "2023-07-15"
+                    },
+                    "priority": {
+                        "type": "string",
+                        "description": "Priority of a task. Possible values: `\"low\", \"medium\", \"high\"`",
+                        "enum": [
+                            "low",
+                            "medium",
+                            "high"
+                        ],
+                        "example": "medium"
+                    },
+                    "category": {
+                        "type": "string",
+                        "enum": [
+                            "to-do",
+                            "in-progress",
+                            "done"
+                        ],
+                        "description": "The category of a task. Possible values: `\"to-do\", \"in-progress\", \"done\"`",
+                        "example": "to-do"
+                    }
+                }
+            },
+            "createReviewRequest": {
+                "type": "object",
+                "required": [
+                    "rating",
+                    "required"
+                ],
+                "properties": {
+                    "rating": {
+                        "type": "number",
+                        "description": "Rating."
+                    },
+                    "comment": {
+                        "type": "string",
+                        "description": "Comment",
+                        "example": "GooseTrack the best!"
+                    }
+                }
+            },
+            "updateReviewRequest": {
+                "type": "object",
+                "properties": {
+                    "rating": {
+                        "type": "number",
+                        "description": "Rating."
+                    },
+                    "comment": {
+                        "type": "string",
+                        "description": "Comment",
+                        "example": "GooseTrack the best!"
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "Bearer": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}
