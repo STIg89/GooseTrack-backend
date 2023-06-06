@@ -57,11 +57,12 @@ const verifyEmail = async (req, res) => {
     verify: true,
   });
 
-  res.status(200).json({
-    status: 'success',
-    code: 200,
-    data: { message: 'Email verify success' },
-  });
+  const { SECRET_KEY } = process.env;
+  const payload = { id: user._id };
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
+  await User.findByIdAndUpdate(user._id, { token });
+
+  res.redirect(`http://localhost:3000/GooseTrack-frontend/login/${token}`);
 };
 //----------------------------re-verify-email----------------------------------------------
 const resendVerifyEmail = async (req, res) => {
@@ -107,6 +108,20 @@ const login = async (req, res) => {
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
   await User.findByIdAndUpdate(user._id, { token });
+  res.status(200).json({
+    status: 'success',
+    code: 200,
+    token: token,
+  });
+};
+
+const loginWithToken = async (req, res) => {
+  const token = req.params.token;
+  const user = await User.findOne({ token: token });
+  if (!user) {
+    throw HttpError(401, 'Token is invalid');
+  }
+
   res.status(200).json({
     status: 'success',
     code: 200,
@@ -256,6 +271,7 @@ const updateUserTwo = async (req, res) => {
 module.exports = {
   registration: ctrlWrapper(registration),
   login: ctrlWrapper(login),
+  loginWithToken: ctrlWrapper(loginWithToken),
   getCurrent: ctrlWrapper(current),
   logout: ctrlWrapper(logout),
   updateUser: ctrlWrapper(updateUser),
