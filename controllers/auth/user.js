@@ -11,7 +11,7 @@ const { cloudinary } = require('../../middlewares');
 const EmailVerifycation = { status: true, title: 'verifycation' };
 const { User } = require('../../models/user');
 const { HttpError, ctrlWrapper, sendEmail } = require('../../helpers');
-const { BASE_URL } = process.env;
+const { BASE_URL, FRONT_BASE_URL} = process.env;
 
 const avatarDir = path.join(__dirname, '../', '../', 'public', 'avatars');
 
@@ -62,7 +62,7 @@ const verifyEmail = async (req, res) => {
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
   await User.findByIdAndUpdate(user._id, { token });
 
-  res.redirect(`http://localhost:3000/GooseTrack-frontend/login/${token}`);
+  res.redirect(`${FRONT_BASE_URL}/login/${token}`);
 };
 //----------------------------re-verify-email----------------------------------------------
 const resendVerifyEmail = async (req, res) => {
