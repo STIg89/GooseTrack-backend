@@ -5,6 +5,7 @@ const {
   authenticate,
   uploder,
   uploadCloud,
+  passport,
 } = require('../../middlewares');
 const {
   registrationSchema,
@@ -16,6 +17,18 @@ const {
 //console.log(userCtrl);
 
 const router = express.Router();
+//------------------------google----------------------------------
+router.get(
+  '/google',
+  passport.authenticate('google', { scope: ['email', 'profile'] })
+);
+
+router.get(
+  '/google/callback',
+  passport.authenticate('google', { session: false }),
+  userCtrl.googleAuth
+);
+//--------------------------------------------------------------------
 router.post(
   '/registration',
   validateBody(registrationSchema),

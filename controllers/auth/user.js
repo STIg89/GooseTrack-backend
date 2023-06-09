@@ -11,7 +11,7 @@ const { cloudinary } = require('../../middlewares');
 const EmailVerifycation = { status: true, title: 'verifycation' };
 const { User } = require('../../models/user');
 const { HttpError, ctrlWrapper, sendEmail } = require('../../helpers');
-const { BASE_URL, FRONT_BASE_URL} = process.env;
+const { BASE_URL, FRONT_BASE_URL } = process.env;
 
 const avatarDir = path.join(__dirname, '../', '../', 'public', 'avatars');
 
@@ -61,6 +61,18 @@ const verifyEmail = async (req, res) => {
   const payload = { id: user._id };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
   await User.findByIdAndUpdate(user._id, { token });
+
+  res.redirect(`${FRONT_BASE_URL}/login/${token}`);
+};
+//----------------------------google-auth--------------------------------------------------
+const googleAuth = async (req, res) => {
+  console.log(req.user);
+  const id = req.user._id;
+  const { SECRET_KEY } = process.env;
+  const payload = { id };
+
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
+  await User.findByIdAndUpdate(id, { token });
 
   res.redirect(`${FRONT_BASE_URL}/login/${token}`);
 };
@@ -278,4 +290,5 @@ module.exports = {
   updateUserCloud: ctrlWrapper(updateUserTwo),
   verifyEmail: ctrlWrapper(verifyEmail),
   resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
+  googleAuth: ctrlWrapper(googleAuth),
 };
