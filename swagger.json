@@ -3,17 +3,11 @@
   "info": {
     "version": "1.0.0",
     "title": "GooseTrack",
-    "description": "Showing off swagger-ui-express",
-    "license": {
-      "name": "MIT",
-      "url": "https://opensource.org/licenses/MIT"
-    }
+    "description": "[**GooseTrack**](https://stig89.github.io/GooseTrack-frontend) is an intuitive calendar app that helps you stay organized and on top of your tasks.</br></br>With **GooseTrack**, you can effortlessly _`create`_, _`update`_, and _`delete`_ tasks, as well as _`retrieve tasks for a specific month`_. Additionally, you can personalize your profile by _`updating`_ your information and _`uploading`_ an avatar.</br></br>One of the standout features of **GooseTrack** is the ability for users to _`leave feedback`_ about the app. Whether it's sharing thoughts, suggesting improvements, or expressing appreciation, users can provide valuable insights through their feedback, helping to shape the future development of the app.</br></br>So, go ahead and start using **GooseTrack API** to enhance your calendar experience, organize your schedule, manage your tasks, and stay on top of your commitments. With its user-friendly interface and powerful features, the **GooseTrack API** enables you to make the most of your calendar application and keep track of your busy life. Start using this [application](https://stig89.github.io/GooseTrack-frontend) right away or customize your own integration with this API happily!</br></br>You can also visit the [repository](https://github.com/STIg89/GooseTrack-backend) of this application for more detailed information.</br></br>***Notes**:</br><ul><li>Base url `https://goosetrack-backend.onrender.com` ;</li><li>Date follows the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) standard, meaning the format `YYYY-MM-DD`;</li><li>In search/list endpoints, use pagination and limit: `page` and `limit`;</li></ul>"
   },
-  "consumes": ["application/json", "multipart/form-data"],
-  "produces": ["application/json", "multipart/form-data"],
   "servers": [
     {
-      "url": "http://localhost:4000"
+      "url": "http://localhost:5050"
     },
     {
       "url": "https://goosetrack-backend.onrender.com"
@@ -36,7 +30,9 @@
   "paths": {
     "/api/auth/registration": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "User registration",
         "security": [
           {
@@ -60,25 +56,69 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": ""
+                  "$ref": "#/components/schemas/RegistrationResponse"
                 }
               }
             }
           },
           "400": {
             "description": "Bad request (invalid request body)",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
           },
           "409": {
-            "description": "Provided email already exists",
-            "content": {}
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/api/auth/login": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "User login",
         "security": [
           {
@@ -102,63 +142,69 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": ""
+                  "$ref": "#/components/schemas/loginResponse"
                 }
               }
             }
           },
           "400": {
             "description": "Bad request (invalid request body)",
-            "content": {}
-          },
-          "409": {
-            "description": "Provided email already exists",
-            "content": {}
-          }
-        }
-      }
-    },
-    "/api/auth/verify/{verificationToken}": {
-      "get": {
-        "tags": ["Auth"],
-        "summary": "Verify user by token",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "verificationToken",
-            "required": true
-          }
-        ],
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": ""
+                  "$ref": "#/components/schemas/badRequestResponse"
                 }
               }
             }
           },
-          "400": {
-            "description": "Bad request (invalid request body)",
-            "content": {}
+          "401": {
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
           },
           "409": {
-            "description": "Provided email already exists",
-            "content": {}
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/api/auth/verify": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Verify user by token",
         "parameters": [],
         "security": [
@@ -172,25 +218,69 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": ""
+                  "$ref": "#/components/schemas/verifyResponse"
                 }
               }
             }
           },
           "400": {
             "description": "Bad request (invalid request body)",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
           },
           "409": {
-            "description": "Provided email already exists",
-            "content": {}
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/api/auth/current": {
       "get": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Retrieves an info about current user.",
         "parameters": [],
         "security": [
@@ -204,25 +294,166 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": ""
+                  "$ref": "#/components/schemas/currentResponse"
                 }
               }
             }
           },
           "400": {
             "description": "Bad request (invalid request body)",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
           },
           "409": {
-            "description": "Provided email already exists",
-            "content": {}
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/user": {
+      "put": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Update user info and upload avatar",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "requestBody": {
+          "description": "User info and avatar upload",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "avatar": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateUserInfoRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/notFoundResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/api/auth/logout": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Logout.",
         "parameters": [],
         "security": [
@@ -231,53 +462,105 @@
           }
         ],
         "responses": {
-          "201": {
-            "description": "Successful operation",
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": ""
+                  "$ref": "#/components/schemas/badRequestResponse"
                 }
               }
             }
           },
-          "400": {
-            "description": "Bad request (invalid request body)",
-            "content": {}
+          "401": {
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
           },
           "409": {
-            "description": "Provided email already exists",
-            "content": {}
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/api/tasks": {
       "get": {
-        "tags": ["Tasks"],
+        "tags": [
+          "Tasks"
+        ],
         "summary": "Returns a list of all tasks by parameters.",
         "parameters": [
           {
             "in": "query",
             "name": "month",
             "required": true,
-            "example": 7
+            "example": 7,
+            "schema": {
+              "type": "number"
+            }
           },
           {
             "in": "query",
-            "name": "day"
+            "name": "day",
+            "schema": {
+              "type": "number"
+            }
           },
           {
             "in": "query",
-            "name": "year"
+            "name": "year",
+            "schema": {
+              "type": "number"
+            }
           },
           {
             "in": "query",
-            "name": "page"
+            "name": "page",
+            "schema": {
+              "type": "number"
+            }
           },
           {
             "in": "query",
-            "name": "limit"
+            "name": "limit",
+            "schema": {
+              "type": "number"
+            }
           }
         ],
         "security": [
@@ -291,23 +574,67 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": ""
+                  "$ref": "#/components/schemas/searchTaskResponse"
                 }
               }
             }
           },
           "400": {
             "description": "Bad request (invalid request body)",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
           },
           "409": {
-            "description": "Provided email already exists",
-            "content": {}
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
           }
         }
       },
       "post": {
-        "tags": ["Tasks"],
+        "tags": [
+          "Tasks"
+        ],
         "summary": "Returns a list of all tasks by parameters.",
         "parameters": [],
         "security": [
@@ -332,30 +659,78 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": ""
+                  "$ref": "#/components/schemas/createTaskResponse"
                 }
               }
             }
           },
           "400": {
             "description": "Bad request (invalid request body)",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
           },
           "409": {
-            "description": "Provided email already exists",
-            "content": {}
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/api/tasks/{id}": {
       "patch": {
-        "tags": ["Tasks"],
+        "tags": [
+          "Tasks"
+        ],
         "summary": "Updates an existing task.",
         "parameters": [
           {
             "in": "path",
-            "name": "id"
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "security": [
@@ -380,28 +755,76 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": ""
+                  "$ref": "#/components/schemas/createTaskResponse"
                 }
               }
             }
           },
           "400": {
             "description": "Bad request (invalid request body)",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
           },
           "409": {
-            "description": "Provided email already exists",
-            "content": {}
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
           }
         }
       },
       "delete": {
-        "tags": ["Tasks"],
+        "tags": [
+          "Tasks"
+        ],
         "summary": "Updates an existing task.",
         "parameters": [
           {
             "in": "path",
-            "name": "id"
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "security": [
@@ -410,41 +833,97 @@
           }
         ],
         "responses": {
-          "201": {
+          "200": {
             "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": ""
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Deleted successfully!"
+                    }
+                  }
                 }
               }
             }
           },
           "400": {
             "description": "Bad request (invalid request body)",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
           },
           "409": {
-            "description": "Provided email already exists",
-            "content": {}
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/api/reviews": {
       "get": {
-        "tags": ["Reviews"],
+        "tags": [
+          "Reviews"
+        ],
         "summary": "Returns a list of all reviews.",
         "parameters": [
           {
             "in": "query",
             "name": "limit",
-            "example": 10
+            "example": 10,
+            "schema": {
+              "type": "number"
+            }
           },
           {
             "in": "query",
             "name": "page",
-            "example": 1
+            "example": 1,
+            "schema": {
+              "type": "number"
+            }
           }
         ],
         "security": [
@@ -453,28 +932,72 @@
           }
         ],
         "responses": {
-          "201": {
+          "200": {
             "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": ""
+                  "$ref": "#/components/schemas/getReviewResponse"
                 }
               }
             }
           },
           "400": {
             "description": "Bad request (invalid request body)",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
           },
           "409": {
-            "description": "Provided email already exists",
-            "content": {}
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
           }
         }
       },
       "post": {
-        "tags": ["Reviews"],
+        "tags": [
+          "Reviews"
+        ],
         "summary": "Create a Review.",
         "parameters": [],
         "security": [
@@ -499,36 +1022,86 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": ""
+                  "$ref": "#/components/schemas/createReviewResponse"
                 }
               }
             }
           },
           "400": {
             "description": "Bad request (invalid request body)",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
           },
           "409": {
-            "description": "Provided email already exists",
-            "content": {}
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/api/reviews/user": {
       "get": {
-        "tags": ["Reviews"],
+        "tags": [
+          "Reviews"
+        ],
         "summary": "Returns a list of all current user reviews.",
         "parameters": [
           {
             "in": "query",
             "name": "limit",
-            "example": 10
+            "example": 10,
+            "schema": {
+              "type": "number"
+            }
           },
           {
             "in": "query",
             "name": "page",
-            "example": 1
+            "example": 1,
+            "schema": {
+              "type": "number"
+            }
           }
         ],
         "security": [
@@ -537,35 +1110,83 @@
           }
         ],
         "responses": {
-          "201": {
+          "200": {
             "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": ""
+                  "$ref": "#/components/schemas/getReviewResponse"
                 }
               }
             }
           },
           "400": {
             "description": "Bad request (invalid request body)",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
           },
           "409": {
-            "description": "Provided email already exists",
-            "content": {}
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/api/reviews/{id}": {
       "get": {
-        "tags": ["Reviews"],
+        "tags": [
+          "Reviews"
+        ],
         "summary": "Returns a review by specific ID.",
         "parameters": [
           {
             "in": "path",
-            "name": "id"
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "security": [
@@ -574,33 +1195,81 @@
           }
         ],
         "responses": {
-          "201": {
+          "200": {
             "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": ""
+                  "$ref": "#/components/schemas/getOneReviewResponse"
                 }
               }
             }
           },
           "400": {
             "description": "Bad request (invalid request body)",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
           },
           "409": {
-            "description": "Provided email already exists",
-            "content": {}
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
           }
         }
       },
       "put": {
-        "tags": ["Reviews"],
+        "tags": [
+          "Reviews"
+        ],
         "summary": "Updates an existing review.",
         "parameters": [
           {
             "in": "path",
-            "name": "id"
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "security": [
@@ -620,23 +1289,154 @@
           }
         },
         "responses": {
-          "201": {
+          "200": {
             "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": ""
+                  "$ref": "#/components/schemas/createReviewResponse"
                 }
               }
             }
           },
           "400": {
             "description": "Bad request (invalid request body)",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
           },
           "409": {
-            "description": "Provided email already exists",
-            "content": {}
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Reviews"
+        ],
+        "summary": "Deletes an existing review.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Deleted successfully!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -646,7 +1446,11 @@
     "schemas": {
       "RegistrationRequest": {
         "type": "object",
-        "required": ["email", "password", "name"],
+        "required": [
+          "email",
+          "password",
+          "name"
+        ],
         "properties": {
           "email": {
             "type": "string",
@@ -680,37 +1484,65 @@
           }
         }
       },
+      "updateUserInfoRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "name": {
+            "type": "string",
+            "description": "User's name"
+          },
+          "birthday": {
+            "type": "string",
+            "description": "Day of birthday in `YYYY-MM-DD` format",
+            "example": "2000-01-01"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Phone number"
+          },
+          "skype": {
+            "type": "string",
+            "description": "Skype"
+          }
+        }
+      },
       "RegistrationResponse": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "email": {
-              "type": "string",
-              "description": "User's email",
-              "format": "email"
-            },
-            "userId": {
-              "type": "number",
-              "description": "User's id",
-              "example": "32143232436545474"
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "example": 201
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "Alexey"
+              },
+              "email": {
+                "type": "string",
+                "example": "aqweqwe@gmail.com"
+              }
             }
           }
-        },
-        "example": [
-          {
-            "email": "1@gmail.com",
-            "userId": "1"
-          },
-          {
-            "email": "2@gmail.com",
-            "userId": "2"
-          }
-        ]
+        }
       },
       "loginRequest": {
         "type": "object",
-        "required": ["email", "password"],
+        "required": [
+          "email",
+          "password"
+        ],
         "properties": {
           "email": {
             "type": "string",
@@ -724,9 +1556,123 @@
           }
         }
       },
+      "loginResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "example": 201
+          },
+          "token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIs....."
+          }
+        }
+      },
+      "unauthorizedResponse": {
+        "type": "object",
+        "items": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            }
+          }
+        },
+        "example": {
+          "message": "Unauthorized"
+        }
+      },
+      "verifyResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "Verification email sent"
+              }
+            }
+          }
+        }
+      },
+      "currentResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "Goose"
+              },
+              "email": {
+                "type": "string",
+                "format": "email",
+                "example": "goose@track.com"
+              },
+              "avatarURL": {
+                "type": "string",
+                "example": "https://stig89.github.io/GooseTrack-frontend/static/media/GooseLogo@2x.3c0470b19aa18aaef0d8.png"
+              },
+              "birthday": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2023-06-09T22:07:46.170Z"
+              },
+              "phone": {
+                "type": "string",
+                "example": "+123564689"
+              },
+              "skype": {
+                "type": "string",
+                "example": "@Goose"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2023-06-09T22:07:46.176Z"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2023-06-09T22:17:38.953Z"
+              }
+            }
+          }
+        }
+      },
       "createTaskRequest": {
         "type": "object",
-        "required": ["title", "start", "end", "date", "priority", "category"],
+        "required": [
+          "title",
+          "start",
+          "end",
+          "date",
+          "priority",
+          "category"
+        ],
         "properties": {
           "title": {
             "type": "string",
@@ -734,32 +1680,195 @@
             "example": "New Task"
           },
           "start": {
-            "type": "time",
+            "type": "string",
             "description": "Start time. In `HH:mm` format.",
             "example": "09:00"
           },
           "end": {
-            "type": "time",
+            "type": "string",
             "description": "End time. In `HH:mm` format. Must be greater than `start`.",
             "example": "17:00"
           },
           "date": {
-            "type": "date",
+            "type": "string",
             "description": "Day on which to schedule a task. In [ISO 8601 date format](https://en.wikipedia.org/wiki/ISO_8601).",
             "example": "2023-07-15"
           },
           "priority": {
             "type": "string",
             "description": "Priority of a task. Possible values: `\"low\", \"medium\", \"high\"`",
-            "enum": ["low", "medium", "high"],
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
             "example": "medium"
           },
           "category": {
             "type": "string",
-            "enum": ["to-do", "in-progress", "done"],
+            "enum": [
+              "to-do",
+              "in-progress",
+              "done"
+            ],
             "description": "The category of a task. Possible values: `\"to-do\", \"in-progress\", \"done\"`",
             "example": "to-do"
           }
+        }
+      },
+      "createTaskResponse": {
+        "type": "object",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "start": {
+              "type": "string"
+            },
+            "end": {
+              "type": "string"
+            },
+            "date": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "priority": {
+              "type": "string",
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ]
+            },
+            "category": {
+              "type": "string",
+              "enum": [
+                "to-do",
+                "in-progress",
+                "done"
+              ]
+            },
+            "owner": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        },
+        "example": {
+          "_id": "1",
+          "title": "Task 1",
+          "start": "09:00",
+          "end": "10:00",
+          "date": "2023-06-10T00:00:00Z",
+          "priority": "medium",
+          "category": "to-do",
+          "owner": "john@example.com",
+          "createdAt": "2023-06-09T14:30:00Z",
+          "updatedAt": "2023-06-09T15:45:00Z"
+        }
+      },
+      "searchTaskResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "start": {
+              "type": "string"
+            },
+            "end": {
+              "type": "string"
+            },
+            "date": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "priority": {
+              "type": "string",
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ]
+            },
+            "category": {
+              "type": "string",
+              "enum": [
+                "to-do",
+                "in-progress",
+                "done"
+              ]
+            },
+            "owner": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "year": {
+              "type": "integer",
+              "example": 2023
+            },
+            "month": {
+              "type": "integer",
+              "example": 7
+            },
+            "day": {
+              "type": "integer",
+              "example": 7
+            }
+          }
+        },
+        "example": {
+          "_id": "1",
+          "title": "Task 1",
+          "start": "09:00",
+          "end": "10:00",
+          "date": "2023-06-10T00:00:00Z",
+          "priority": "medium",
+          "category": "to-do",
+          "owner": "john@example.com",
+          "createdAt": "2023-06-09T14:30:00Z",
+          "updatedAt": "2023-06-09T15:45:00Z",
+          "year": 2023,
+          "month": 7,
+          "day": 7
+        }
+      },
+      "badRequestResponse": {
+        "type": "object",
+        "items": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            }
+          }
+        },
+        "example": {
+          "message": "Bad Request."
         }
       },
       "updateTaskRequest": {
@@ -771,29 +1880,37 @@
             "example": "New Task"
           },
           "start": {
-            "type": "time",
+            "type": "string",
             "description": "Start time. In `HH:mm` format.",
             "example": "09:00"
           },
           "end": {
-            "type": "time",
+            "type": "string",
             "description": "End time. In `HH:mm` format. Must be greater than `start`.",
             "example": "17:00"
           },
           "date": {
-            "type": "date",
+            "type": "string",
             "description": "Day on which to schedule a task. In [ISO 8601 date format](https://en.wikipedia.org/wiki/ISO_8601).",
             "example": "2023-07-15"
           },
           "priority": {
             "type": "string",
             "description": "Priority of a task. Possible values: `\"low\", \"medium\", \"high\"`",
-            "enum": ["low", "medium", "high"],
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
             "example": "medium"
           },
           "category": {
             "type": "string",
-            "enum": ["to-do", "in-progress", "done"],
+            "enum": [
+              "to-do",
+              "in-progress",
+              "done"
+            ],
             "description": "The category of a task. Possible values: `\"to-do\", \"in-progress\", \"done\"`",
             "example": "to-do"
           }
@@ -801,7 +1918,10 @@
       },
       "createReviewRequest": {
         "type": "object",
-        "required": ["rating", "required"],
+        "required": [
+          "rating",
+          "required"
+        ],
         "properties": {
           "rating": {
             "type": "number",
@@ -811,6 +1931,156 @@
             "type": "string",
             "description": "Comment",
             "example": "GooseTrack the best!"
+          }
+        }
+      },
+      "createReviewResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Status of request",
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "example": 201
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "rating": {
+                "type": "integer"
+              },
+              "comment": {
+                "type": "string",
+                "description": "Comment",
+                "example": "GooseTrack the best!"
+              },
+              "owner": {
+                "type": "string",
+                "example": "1346464sdasd48464asd"
+              },
+              "_id": {
+                "type": "string",
+                "example": "aasdfdfd77979797sd9f797sdf"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2023-06-09T22:43:06.511Z"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time",
+                "example": "2023-06-09T22:43:06.511Z"
+              }
+            }
+          }
+        }
+      },
+      "getReviewResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Status of request",
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "example": 201
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "rating": {
+                  "type": "integer"
+                },
+                "_id": {
+                  "type": "string",
+                  "example": "aasdfdfd77979797sd9f797sdf",
+                  "description": "Review ID"
+                },
+                "comment": {
+                  "type": "string",
+                  "description": "Comment",
+                  "example": "GooseTrack the best!"
+                },
+                "owner": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "example": "aasdfdfd77979797sd9f797sdf",
+                      "description": "User ID"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Goose",
+                      "description": "User Name"
+                    },
+                    "avatarURL": {
+                      "type": "string",
+                      "example": "https://stig89.github.io/GooseTrack-frontend/static/media/GooseLogo@2x.3c0470b19aa18aaef0d8.png"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "getOneReviewResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Status of request",
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "example": 201
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "rating": {
+                "type": "integer"
+              },
+              "_id": {
+                "type": "string",
+                "example": "aasdfdfd77979797sd9f797sdf",
+                "description": "Review ID"
+              },
+              "comment": {
+                "type": "string",
+                "description": "Comment",
+                "example": "GooseTrack the best!"
+              },
+              "owner": {
+                "type": "object",
+                "properties": {
+                  "_id": {
+                    "type": "string",
+                    "example": "aasdfdfd77979797sd9f797sdf",
+                    "description": "User ID"
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "Goose",
+                    "description": "User Name"
+                  },
+                  "avatarURL": {
+                    "type": "string",
+                    "example": "https://stig89.github.io/GooseTrack-frontend/static/media/GooseLogo@2x.3c0470b19aa18aaef0d8.png"
+                  }
+                }
+              }
+            }
           }
         }
       },
@@ -826,6 +2096,48 @@
             "description": "Comment",
             "example": "GooseTrack the best!"
           }
+        }
+      },
+      "notFoundResponse": {
+        "type": "object",
+        "items": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            }
+          }
+        },
+        "example": {
+          "message": "Not found"
+        }
+      },
+      "forbiddenResponse": {
+        "type": "object",
+        "items": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            }
+          }
+        },
+        "example": {
+          "message": "Forbidden"
+        }
+      },
+      "conflictResponse": {
+        "type": "object",
+        "items": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            }
+          }
+        },
+        "example": {
+          "message": "Conflict"
         }
       }
     },
