@@ -66,11 +66,9 @@ const verifyEmail = async (req, res) => {
 };
 //----------------------------google-auth--------------------------------------------------
 const googleAuth = async (req, res) => {
-  console.log('req:', req);
-  const { _id: id } = req.user;
+  const id = req.user._id;
   const { SECRET_KEY } = process.env;
   const payload = { id };
-  console.log('payload:', payload);
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
   await User.findByIdAndUpdate(id, { token, verify: true });
