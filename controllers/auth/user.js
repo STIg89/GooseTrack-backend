@@ -31,11 +31,20 @@ const registration = async (req, res) => {
     password: hashPassword,
     verificationToken: verifycationCode,
   });
+  const htmlContent = `
+    <h1>Welcome to Goose-Track</h1>
+    <p>Hello, thanks for signing up for our service. Please verify your email by clicking the link below:</p>
+    <p><a href="${BASE_URL}/api/auth/verify/${verifycationCode}">Start your plans</a></p>
+    <p>If you did not sign up for this account, you can ignore this email.</p>
+    <p>Thanks,</p>
+    <p>Your S&M CODERS Team</p>
+`;
+
   if (EmailVerifycation.status == true) {
     await sendEmail(
       req.body.email,
       EmailVerifycation.title,
-      `<a target="_blanck" href="${BASE_URL}/api/auth/verify/${verifycationCode}"> verify your email - click here <a/>`
+      htmlContent
     );
   }
 
