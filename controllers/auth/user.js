@@ -66,13 +66,14 @@ const verifyEmail = async (req, res) => {
 };
 //----------------------------google-auth--------------------------------------------------
 const googleAuth = async (req, res) => {
-  // const id = req.user._id;
+  console.log('req:', req);
+  const { _id: id } = req.user;
   const { SECRET_KEY } = process.env;
-  const payload = { id: req.user._id };
+  const payload = { id };
   console.log('payload:', payload);
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
-  await User.findByIdAndUpdate(req.user._id, { token, verify: true });
+  await User.findByIdAndUpdate(id, { token, verify: true });
 
   res.redirect(`${FRONT_BASE_URL}/login/${token}`);
 };
