@@ -2,7 +2,7 @@ const express = require('express');
 const userCtrl = require('../../controllers/auth/user');
 const {
   validateBody,
-  authenticate,
+  auth,
   uploder,
   uploadCloud,
   passport,
@@ -43,13 +43,13 @@ router.get('/verify/:verificationToken', userCtrl.verifyEmail); //верефік
 
 router.post('/verify', validateBody(emailSchema), userCtrl.resendVerifyEmail);
 
-router.get('/current', authenticate, userCtrl.getCurrent);
+router.get('/current', auth, userCtrl.getCurrent);
 
-router.post('/logout', authenticate, userCtrl.logout);
+router.post('/logout', auth, userCtrl.logout);
 
 router.patch(
   '/user',
-  authenticate,
+  auth,
   uploder.single('avatar'),
   validateBody(updateUserSchema),
   userCtrl.updateUserCloud
@@ -57,7 +57,7 @@ router.patch(
 
 router.put(
   '/user',
-  authenticate,
+  auth,
   uploadCloud.single('avatar'),
   validateBody(updateUserSchema),
   userCtrl.updateUserCloud

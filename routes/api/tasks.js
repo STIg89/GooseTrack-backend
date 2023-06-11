@@ -1,16 +1,31 @@
-const express = require('express')
-const router = express.Router()
-const tasksController = require('../../controllers/tasks')
-const { validateBody, authenticate, validateQuery } = require('../../middlewares');
+const express = require('express');
+const router = express.Router();
+const tasksController = require('../../controllers/tasks');
+const { validateBody, auth, validateQuery } = require('../../middlewares');
 
-const schema = require('../../schemas')
+const schema = require('../../schemas');
 
-router.get('', authenticate, validateQuery(schema.listTasksPerMonth), tasksController.listPerMonth)
+router.get(
+  '',
+  auth,
+  validateQuery(schema.listTasksPerMonth),
+  tasksController.listPerMonth
+);
 
-router.post('', authenticate, validateBody(schema.createTaskValidation), tasksController.create)
+router.post(
+  '',
+  auth,
+  validateBody(schema.createTaskValidation),
+  tasksController.create
+);
 
-router.patch('/:id', authenticate, validateBody(schema.updateTaskValidation), tasksController.update)
+router.patch(
+  '/:id',
+  auth,
+  validateBody(schema.updateTaskValidation),
+  tasksController.update
+);
 
-router.delete('/:id', authenticate, tasksController.deleteById)
+router.delete('/:id', auth, tasksController.deleteById);
 
-module.exports = router
+module.exports = router;

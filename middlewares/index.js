@@ -1,12 +1,12 @@
 const { validateBody } = require('./validateBody');
 const { validateQuery } = require('./validateQuery');
-const authenticate = require('./authenticate');
+const auth = require('./auth');
 const { uploder, uploadCloud, cloudinary } = require('./uploader');
-const passport = require('./google_authenticate');
+const passport = require('./passport');
 
 module.exports = {
   validateBody,
-  authenticate,
+  auth,
   uploder,
   uploadCloud,
   validateQuery,
