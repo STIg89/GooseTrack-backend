@@ -1,6 +1,5 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const gravatar = require('gravatar');
 const path = require('path');
 const fs = require('fs/promises');
 const Jimp = require('jimp');
@@ -8,11 +7,11 @@ const { nanoid } = require('nanoid');
 
 const { cloudinary } = require('../../middlewares');
 
-const EmailVerifycation = { status: true, title: 'verifycation' };
+const EmailVerifycation = { status: true, title: 'verifycation' }; //email settings
 const { User } = require('../../models/user');
 const { HttpError, ctrlWrapper, sendEmail } = require('../../helpers');
-const { BASE_URL, FRONT_BASE_URL } = process.env;
-
+const { BASE_URL, FRONT_BASE_URL, SECRET_KEY, REFRESH_SECRET_KEY } =
+  process.env;
 const avatarDir = path.join(__dirname, '../', '../', 'public', 'avatars');
 
 //-----------------------------registration-------------------------------------------------------
@@ -23,7 +22,6 @@ const registration = async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(req.body.password, 10);
-  //const avatarURL = gravatar.url(req.body.email);
   const verifycationCode = nanoid();
 
   const newUser = await User.create({
@@ -41,11 +39,7 @@ const registration = async (req, res) => {
 `;
 
   if (EmailVerifycation.status == true) {
-    await sendEmail(
-      req.body.email,
-      EmailVerifycation.title,
-      htmlContent
-    );
+    await sendEmail(req.body.email, EmailVerifycation.title, htmlContent);
   }
 
   res.status(201).json({
@@ -66,23 +60,27 @@ const verifyEmail = async (req, res) => {
     verify: true,
   });
 
-  const { SECRET_KEY } = process.env;
   const payload = { id: user._id };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
+  const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
+    expiresIn: '7d',
+  });
   await User.findByIdAndUpdate(user._id, { token });
 
-  res.redirect(`${FRONT_BASE_URL}/login/${token}`);
+  res.redirect(`${FRONT_BASE_URL}/login/${token}`); //res.redirect(`${FRONT_BASE_URL}/login/?token=${token}&refreshToken=${refreshToken}`);
 };
 //----------------------------google-auth--------------------------------------------------
 const googleAuth = async (req, res) => {
   const id = req.user._id;
-  const { SECRET_KEY } = process.env;
   const payload = { id };
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
-  await User.findByIdAndUpdate(id, { token, verify: true });
+  const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
+    expiresIn: '7d',
+  });
+  await User.findByIdAndUpdate(id, { token, refreshToken, verify: true });
 
-  res.redirect(`${FRONT_BASE_URL}/login/${token}`);
+  res.redirect(`${FRONT_BASE_URL}/login/${token}`); //res.redirect(`${FRONT_BASE_URL}/login/?token=${token}&refreshToken=${refreshToken}`);
 };
 //----------------------------re-verify-email----------------------------------------------
 const resendVerifyEmail = async (req, res) => {
@@ -123,18 +121,50 @@ const login = async (req, res) => {
     throw HttpError(401, 'Email or password ivalid');
   }
 
-  const { SECRET_KEY } = process.env;
   const payload = { id: user._id };
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
+  const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
+    expiresIn: '7d',
+  });
+
   await User.findByIdAndUpdate(user._id, { token });
   res.status(200).json({
     status: 'success',
     code: 200,
     token: token,
+    refreshToken: refreshToken,
   });
 };
+//------------------refresh------------------------------------
+const refresh = async (req, res) => {
+  const { refreshToken: rToken } = req.body;
 
+  try {
+    const { id } = jwt.verify(rToken, REFRESH_SECRET_KEY);
+    const isExist = await User.findOne({ refreshToken: rToken });
+    if (!isExist) {
+      throw HttpError(403, 'token is not valid');
+    }
+
+    const payload = { id };
+
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
+    const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
+      expiresIn: '7d',
+    });
+
+    res.status(200).json({
+      status: 'success',
+      code: 200,
+      token: token,
+      refreshToken: refreshToken,
+    });
+  } catch (error) {
+    throw HttpError(403, error.message);
+  }
+};
+//-------------------------------------------------------------
 const loginWithToken = async (req, res) => {
   const token = req.params.token;
   const user = await User.findOne({ token: token });
@@ -180,7 +210,7 @@ const current = async (req, res) => {
 const logout = async (req, res) => {
   const { _id } = req.user;
 
-  await User.findByIdAndUpdate(_id, { token: '' });
+  await User.findByIdAndUpdate(_id, { token: '', refreshToken: '' });
   res.status(204).json();
 };
 //----------------------------------update-------------------------------------------
@@ -299,4 +329,5 @@ module.exports = {
   verifyEmail: ctrlWrapper(verifyEmail),
   resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
   googleAuth: ctrlWrapper(googleAuth),
+  refreshToken: ctrlWrapper(refresh),
 };
