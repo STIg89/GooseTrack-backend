@@ -40,9 +40,12 @@ const emailSchema = Joi.object({
   email: Joi.string().pattern(EMAIL_REGEXP).required(),
 });
 
+const refreshSchema = Joi.object({ refreshToken: Joi.string().required() });
+
 module.exports = {
   registrationSchema,
   loginSchema,
   emailSchema,
   updateUserSchema,
+  refreshSchema,
 };

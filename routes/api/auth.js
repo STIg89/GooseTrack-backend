@@ -12,6 +12,7 @@ const {
   loginSchema,
   emailSchema,
   updateUserSchema,
+  refreshSchema,
 } = require('../../schemas');
 
 //console.log(userCtrl);
@@ -38,6 +39,8 @@ router.post(
 router.post('/login', validateBody(loginSchema), userCtrl.login); //логінимось
 
 router.get('/login/:token', userCtrl.loginWithToken);
+
+router.post('/refresh', validateBody(refreshSchema), userCtrl.refreshToken); // оновлюємо токен
 
 router.get('/verify/:verificationToken', userCtrl.verifyEmail); //верефікація пошти
 
