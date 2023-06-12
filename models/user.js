@@ -19,7 +19,7 @@ const userSchema = new Schema(
     name: {
       type: String,
       minLength: [2, 'must be min 2 sybols'],
-      maxLength: [16, 'maximum 16 symbols'],
+      maxLength: [28, 'maximum 25 symbols'],
       required: [true, 'What`s your name?'],
     },
     password: {

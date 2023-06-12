@@ -13,7 +13,7 @@ const { EMAIL_REGEXP, PASSWORD_REGEXP, PHONE_REGEXP } = require('./constants');
 */
 
 const registrationSchema = Joi.object({
-  name: Joi.string().max(16).required(),
+  name: Joi.string().max(28).required(),
   email: Joi.string().pattern(EMAIL_REGEXP).required(),
   password: Joi.string().pattern(PASSWORD_REGEXP).required(),
   birthday: Joi.date().format('YYYY-MM-DD').optional(),
@@ -23,7 +23,7 @@ const registrationSchema = Joi.object({
 });
 
 const updateUserSchema = Joi.object({
-  name: Joi.string().max(16),
+  name: Joi.string().max(28),
   email: Joi.string().pattern(EMAIL_REGEXP),
   password: Joi.string().pattern(PASSWORD_REGEXP),
   birthday: Joi.date().format('YYYY-MM-DD').allow('').optional(),
