@@ -39,7 +39,7 @@ router.post(
 router.post('/login', validateBody(loginSchema), userCtrl.login); //логінимось
 
 router.get(
-  '/login/?accessToken=:accessToken&refreshToken=:refreshToken}',
+  '/login/?accessToken=:accessToken&refreshToken=:refreshToken',
   userCtrl.loginWithToken
 );
 
