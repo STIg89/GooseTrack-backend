@@ -66,6 +66,8 @@ const verifyEmail = async (req, res) => {
     expiresIn: '7d',
   });
   await User.findByIdAndUpdate(user._id, { accessToken, refreshToken });
+  console.log('refreshToken:', refreshToken);
+  console.log('accessToken:', accessToken);
 
   // res.redirect(`${FRONT_BASE_URL}/login/${token}`);
   res.redirect(
@@ -174,7 +176,10 @@ const refresh = async (req, res) => {
 //-------------------------------------------------------------
 const loginWithToken = async (req, res) => {
   const accessToken = req.params.accessToken;
+  console.log('req.params:', req.params);
+  console.log('accessToken:', accessToken);
   const refreshToken = req.params.refreshToken;
+  console.log('refreshToken:', refreshToken);
   const user = await User.findOne({
     accessToken: accessToken,
     refreshToken: refreshToken,
@@ -187,7 +192,7 @@ const loginWithToken = async (req, res) => {
     status: 'success',
     code: 200,
     accessToken: accessToken,
-    refreshToken: user.refreshToken,
+    refreshToken: refreshToken,
   });
 };
 //------------------------------current-----------------------------------------------------
