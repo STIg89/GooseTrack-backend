@@ -13,6 +13,7 @@ const {
   emailSchema,
   updateUserSchema,
   refreshSchema,
+  passSchema,
 } = require('../../schemas');
 
 //console.log(userCtrl);
@@ -65,5 +66,7 @@ router.put(
   validateBody(updateUserSchema),
   userCtrl.updateUserCloud
 );
+
+router.patch('/user/pass', auth, validateBody(passSchema), userCtrl.checkPass);
 
 module.exports = router;

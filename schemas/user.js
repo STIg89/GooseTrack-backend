@@ -40,6 +40,11 @@ const emailSchema = Joi.object({
   email: Joi.string().pattern(EMAIL_REGEXP).required(),
 });
 
+const passSchema = Joi.object({
+  old_password: Joi.string().pattern(PASSWORD_REGEXP).required(),
+  new_password: Joi.string().pattern(PASSWORD_REGEXP).required(),
+});
+
 const refreshSchema = Joi.object({ refreshToken: Joi.string().required() });
 
 module.exports = {
@@ -48,4 +53,5 @@ module.exports = {
   emailSchema,
   updateUserSchema,
   refreshSchema,
+  passSchema,
 };

@@ -4,6 +4,7 @@ const {
   emailSchema,
   updateUserSchema,
   refreshSchema,
+  passSchema,
 } = require('./user');
 const {
   createTaskValidation,
@@ -17,6 +18,7 @@ module.exports = {
   loginSchema,
   emailSchema,
   refreshSchema,
+  passSchema,
   createTaskValidation,
   updateTaskValidation,
   updateUserSchema,

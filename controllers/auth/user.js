@@ -316,6 +316,25 @@ const updateUserTwo = async (req, res) => {
     data: { updatedUser },
   });
 };
+//---------------------------------check-user-pass---------------------------------------
+
+const checkPass = async (req, res) => {
+  const { old_password, new_password } = req.body;
+
+  const passwordCompare = bcrypt.compareSync(old_password, req.user.password);
+
+  if (!passwordCompare) {
+    throw HttpError(400, 'invalid password');
+  }
+  const hashPassword = await bcrypt.hash(new_password, 10);
+  await User.findByIdAndUpdate(req.user.id, { password: hashPassword });
+
+  res.status(200).json({
+    tatus: 'success',
+    code: 200,
+    data: passwordCompare,
+  });
+};
 
 //=======================================================================================
 
@@ -331,4 +350,5 @@ module.exports = {
   resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
   googleAuth: ctrlWrapper(googleAuth),
   refreshToken: ctrlWrapper(refresh),
+  checkPass: ctrlWrapper(checkPass),
 };
