@@ -47,8 +47,8 @@ const userSchema = new Schema(
       type: String,
       default: null,
     },
-    token: { type: String, default: '' },
-    refreshToken: { type: String },
+    accessToken: { type: String, default: '' },
+    refreshToken: { type: String, default: '' },
     avatarURL: {
       type: String,
       default: '',

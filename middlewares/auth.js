@@ -5,16 +5,16 @@ const { SECRET_KEY, REFRESH_SECRET_KEY } = process.env;
 
 const auth = async (req, res, next) => {
   const { authorization = '' } = req.headers;
-  const [bearer, token] = authorization.split(' ');
+  const [bearer, accessToken] = authorization.split(' ');
 
   if (bearer !== 'Bearer') {
     next(HttpError(401, 'un autorise'));
   }
   try {
-    const paload = jwt.verify(token, SECRET_KEY);
+    const paload = jwt.verify(accessToken, SECRET_KEY);
 
     const user = await User.findById(paload.id);
-    if (!user || !user.token || user.token !== token) {
+    if (!user || !user.accessToken || user.accessToken !== accessToken) {
       next(HttpError(401, 'un autorise'));
     }
     req.user = user;

@@ -61,26 +61,32 @@ const verifyEmail = async (req, res) => {
   });
 
   const payload = { id: user._id };
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
+  const accessToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
   const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
     expiresIn: '7d',
   });
-  await User.findByIdAndUpdate(user._id, { token });
+  await User.findByIdAndUpdate(user._id, { accessToken, refreshToken });
 
-  res.redirect(`${FRONT_BASE_URL}/login/${token}`); //res.redirect(`${FRONT_BASE_URL}/login/?token=${token}&refreshToken=${refreshToken}`);
+  // res.redirect(`${FRONT_BASE_URL}/login/${token}`);
+  res.redirect(
+    `${FRONT_BASE_URL}/login/?accessToken=${accessToken}&refreshToken=${refreshToken}`
+  );
 };
 //----------------------------google-auth--------------------------------------------------
 const googleAuth = async (req, res) => {
   const id = req.user._id;
   const payload = { id };
 
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
+  const accessToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
   const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
     expiresIn: '7d',
   });
-  await User.findByIdAndUpdate(id, { token, refreshToken, verify: true });
+  await User.findByIdAndUpdate(id, { accessToken, refreshToken, verify: true });
 
-  res.redirect(`${FRONT_BASE_URL}/login/${token}`); //res.redirect(`${FRONT_BASE_URL}/login/?token=${token}&refreshToken=${refreshToken}`);
+  // res.redirect(`${FRONT_BASE_URL}/login/${token}`);
+  res.redirect(
+    `${FRONT_BASE_URL}/login/?accessToken=${accessToken}&refreshToken=${refreshToken}`
+  );
 };
 //----------------------------re-verify-email----------------------------------------------
 const resendVerifyEmail = async (req, res) => {
@@ -124,16 +130,16 @@ const login = async (req, res) => {
 
   const payload = { id: user._id };
 
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
+  const accessToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
   const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
     expiresIn: '7d',
   });
 
-  await User.findByIdAndUpdate(user._id, { token });
+  await User.findByIdAndUpdate(user._id, { accessToken });
   res.status(200).json({
     status: 'success',
     code: 200,
-    token: token,
+    accessToken: accessToken,
     refreshToken: refreshToken,
   });
 };
@@ -150,7 +156,7 @@ const refresh = async (req, res) => {
 
     const payload = { id };
 
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
+    const accessToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
     const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
       expiresIn: '7d',
     });
@@ -158,7 +164,7 @@ const refresh = async (req, res) => {
     res.status(200).json({
       status: 'success',
       code: 200,
-      token: token,
+      accessToken: accessToken,
       refreshToken: refreshToken,
     });
   } catch (error) {
@@ -167,8 +173,12 @@ const refresh = async (req, res) => {
 };
 //-------------------------------------------------------------
 const loginWithToken = async (req, res) => {
-  const token = req.params.token;
-  const user = await User.findOne({ token: token });
+  const accessToken = req.params.accessToken;
+  const refreshToken = req.params.refreshToken;
+  const user = await User.findOne({
+    accessToken: accessToken,
+    refreshToken: refreshToken,
+  });
   if (!user) {
     throw HttpError(401, 'Token is invalid');
   }
@@ -176,7 +186,8 @@ const loginWithToken = async (req, res) => {
   res.status(200).json({
     status: 'success',
     code: 200,
-    token: token,
+    accessToken: accessToken,
+    refreshToken: user.refreshToken,
   });
 };
 //------------------------------current-----------------------------------------------------
@@ -211,7 +222,7 @@ const current = async (req, res) => {
 const logout = async (req, res) => {
   const { _id } = req.user;
 
-  await User.findByIdAndUpdate(_id, { token: '', refreshToken: '' });
+  await User.findByIdAndUpdate(_id, { accessToken: '', refreshToken: '' });
   res.status(204).json();
 };
 //----------------------------------update-------------------------------------------
