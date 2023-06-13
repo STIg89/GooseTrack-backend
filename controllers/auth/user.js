@@ -61,26 +61,27 @@ const verifyEmail = async (req, res) => {
   });
 
   const payload = { id: user._id };
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
+  const accessToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '23' });
   const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
     expiresIn: '7d',
   });
-  await User.findByIdAndUpdate(user._id, { token });
+  await User.findByIdAndUpdate(user._id, { accessToken, refreshToken });
+  console.log('accessToken:', accessToken);
 
-  res.redirect(`${FRONT_BASE_URL}/login/${token}`); //res.redirect(`${FRONT_BASE_URL}/login/?token=${token}&refreshToken=${refreshToken}`);
+  res.redirect(`${FRONT_BASE_URL}/login/${accessToken}`);
 };
 //----------------------------google-auth--------------------------------------------------
 const googleAuth = async (req, res) => {
   const id = req.user._id;
   const payload = { id };
 
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
+  const accessToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
   const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
     expiresIn: '7d',
   });
-  await User.findByIdAndUpdate(id, { token, refreshToken, verify: true });
+  await User.findByIdAndUpdate(id, { accessToken, refreshToken, verify: true });
 
-  res.redirect(`${FRONT_BASE_URL}/login/${token}`); //res.redirect(`${FRONT_BASE_URL}/login/?token=${token}&refreshToken=${refreshToken}`);
+  res.redirect(`${FRONT_BASE_URL}/login/${accessToken}`);
 };
 //----------------------------re-verify-email----------------------------------------------
 const resendVerifyEmail = async (req, res) => {
@@ -124,25 +125,27 @@ const login = async (req, res) => {
 
   const payload = { id: user._id };
 
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
+  const accessToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
   const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
     expiresIn: '7d',
   });
 
-  await User.findByIdAndUpdate(user._id, { token });
+  await User.findByIdAndUpdate(user._id, { accessToken, refreshToken });
   res.status(200).json({
     status: 'success',
     code: 200,
-    token: token,
+    accessToken: accessToken,
     refreshToken: refreshToken,
   });
 };
 //------------------refresh------------------------------------
 const refresh = async (req, res) => {
   const { refreshToken: rToken } = req.body;
+  console.log('rToken:', rToken);
 
   try {
     const { id } = jwt.verify(rToken, REFRESH_SECRET_KEY);
+    console.log('id:', id);
     const isExist = await User.findOne({ refreshToken: rToken });
     if (!isExist) {
       throw HttpError(403, 'token is not valid');
@@ -150,7 +153,7 @@ const refresh = async (req, res) => {
 
     const payload = { id };
 
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
+    const accessToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
     const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
       expiresIn: '7d',
     });
@@ -158,25 +161,27 @@ const refresh = async (req, res) => {
     res.status(200).json({
       status: 'success',
       code: 200,
-      token: token,
+      accessToken: accessToken,
       refreshToken: refreshToken,
     });
   } catch (error) {
     throw HttpError(403, error.message);
   }
 };
-//-------------------------------------------------------------
+//------------------------------loginWithToken-------------------------------
 const loginWithToken = async (req, res) => {
-  const token = req.params.token;
-  const user = await User.findOne({ token: token });
+  const accessToken = req.params.accessToken;
+  const user = await User.findOne({
+    accessToken: accessToken,
+  });
   if (!user) {
     throw HttpError(401, 'Token is invalid');
   }
-
   res.status(200).json({
     status: 'success',
     code: 200,
-    token: token,
+    accessToken: accessToken,
+    refreshToken: user.refreshToken,
   });
 };
 //------------------------------current-----------------------------------------------------
@@ -211,7 +216,7 @@ const current = async (req, res) => {
 const logout = async (req, res) => {
   const { _id } = req.user;
 
-  await User.findByIdAndUpdate(_id, { token: '', refreshToken: '' });
+  await User.findByIdAndUpdate(_id, { accessToken: '', refreshToken: '' });
   res.status(204).json();
 };
 //----------------------------------update-------------------------------------------
