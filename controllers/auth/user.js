@@ -61,18 +61,14 @@ const verifyEmail = async (req, res) => {
   });
 
   const payload = { id: user._id };
-  const accessToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
+  const accessToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '23' });
   const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
     expiresIn: '7d',
   });
   await User.findByIdAndUpdate(user._id, { accessToken, refreshToken });
-  console.log('refreshToken:', refreshToken);
   console.log('accessToken:', accessToken);
 
-  // res.redirect(`${FRONT_BASE_URL}/login/${token}`);
-  res.redirect(
-    `${FRONT_BASE_URL}/login/?accessToken=${accessToken}&refreshToken=${refreshToken}`
-  );
+  res.redirect(`${FRONT_BASE_URL}/login/${accessToken}`);
 };
 //----------------------------google-auth--------------------------------------------------
 const googleAuth = async (req, res) => {
@@ -85,10 +81,7 @@ const googleAuth = async (req, res) => {
   });
   await User.findByIdAndUpdate(id, { accessToken, refreshToken, verify: true });
 
-  // res.redirect(`${FRONT_BASE_URL}/login/${token}`);
-  res.redirect(
-    `${FRONT_BASE_URL}/login/?accessToken=${accessToken}&refreshToken=${refreshToken}`
-  );
+  res.redirect(`${FRONT_BASE_URL}/login/${accessToken}`);
 };
 //----------------------------re-verify-email----------------------------------------------
 const resendVerifyEmail = async (req, res) => {
@@ -137,7 +130,7 @@ const login = async (req, res) => {
     expiresIn: '7d',
   });
 
-  await User.findByIdAndUpdate(user._id, { accessToken });
+  await User.findByIdAndUpdate(user._id, { accessToken, refreshToken });
   res.status(200).json({
     status: 'success',
     code: 200,
@@ -148,9 +141,11 @@ const login = async (req, res) => {
 //------------------refresh------------------------------------
 const refresh = async (req, res) => {
   const { refreshToken: rToken } = req.body;
+  console.log('rToken:', rToken);
 
   try {
     const { id } = jwt.verify(rToken, REFRESH_SECRET_KEY);
+    console.log('id:', id);
     const isExist = await User.findOne({ refreshToken: rToken });
     if (!isExist) {
       throw HttpError(403, 'token is not valid');
@@ -173,26 +168,20 @@ const refresh = async (req, res) => {
     throw HttpError(403, error.message);
   }
 };
-//-------------------------------------------------------------
+//------------------------------loginWithToken-------------------------------
 const loginWithToken = async (req, res) => {
   const accessToken = req.params.accessToken;
-  console.log('req.params:', req.params);
-  console.log('accessToken:', accessToken);
-  const refreshToken = req.params.refreshToken;
-  console.log('refreshToken:', refreshToken);
   const user = await User.findOne({
     accessToken: accessToken,
-    refreshToken: refreshToken,
   });
   if (!user) {
     throw HttpError(401, 'Token is invalid');
   }
-
   res.status(200).json({
     status: 'success',
     code: 200,
     accessToken: accessToken,
-    refreshToken: refreshToken,
+    refreshToken: user.refreshToken,
   });
 };
 //------------------------------current-----------------------------------------------------

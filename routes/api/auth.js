@@ -38,10 +38,7 @@ router.post(
 
 router.post('/login', validateBody(loginSchema), userCtrl.login); //логінимось
 
-router.get(
-  '/login/?accessToken=:accessToken&refreshToken=:refreshToken',
-  userCtrl.loginWithToken
-);
+router.get('/login/:accessToken', userCtrl.loginWithToken);
 
 router.post('/refresh', validateBody(refreshSchema), userCtrl.refreshToken); // оновлюємо токен
 
