@@ -11,6 +11,7 @@ const getAll = async (req, res) => {
     skip,
     limit,
   }).populate('owner', 'name avatarURL');
+
   res.status(200).json({
     status: 'success',
     code: 200,
