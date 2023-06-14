@@ -2,6 +2,7 @@ const passport = require('passport');
 const { Strategy } = require('passport-google-oauth2');
 const bcrypt = require('bcryptjs');
 const { nanoid } = require('nanoid');
+const { sendEmail } = require('../helpers');
 
 const { User } = require('../models/user');
 
@@ -28,8 +29,8 @@ const googleCallback = async (
     if (user) {
       return done(null, user); //(user) ==== req.user
     }
-
-    const password = await bcrypt.hash(nanoid(), 10);
+    const pass = nanoid();
+    const password = await bcrypt.hash(pass, 10);
 
     const newUser = await User.create({
       email,
@@ -37,6 +38,14 @@ const googleCallback = async (
       name: displayName,
       verify: true,
     });
+
+    const letter = `<h1>Welcome to Goose-Track</h1>
+    <p>Hello, thanks for signing up for our service. Here is your account password: <b>${pass}</b></p>
+    <p>You can always change it in your account settings</p>
+    <p>Thanks,</p>
+    <p>Your S&M CODERS Team</p>`;
+
+    await sendEmail(email, 'Welcome to Goose-Track', letter);
     done(null, newUser);
   } catch (error) {
     done(error, false);
