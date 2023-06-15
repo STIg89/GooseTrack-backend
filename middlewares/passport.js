@@ -29,7 +29,7 @@ const googleCallback = async (
     if (user) {
       return done(null, user); //(user) ==== req.user
     }
-    const pass = nanoid(13);
+    const pass = nanoid(15);
     const password = await bcrypt.hash(pass, 10);
 
     const newUser = await User.create({
