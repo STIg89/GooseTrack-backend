@@ -29,7 +29,7 @@ const reminderTask = async item => {
         { remindSet: true },
         { new: true }
       ).populate('owner', 'name email');
-      console.log(task._id);
+
       if (!task || !task.owner) {
         console.log('off');
         return;

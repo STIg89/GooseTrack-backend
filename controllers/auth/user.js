@@ -61,7 +61,7 @@ const verifyEmail = async (req, res) => {
   });
 
   const payload = { id: user._id };
-  const accessToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '23' });
+  const accessToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
   const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
     expiresIn: '7d',
   });
