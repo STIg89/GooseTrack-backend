@@ -17,9 +17,9 @@ const reminderTask = async item => {
   const timer = new Date(item.date);
   timer.setHours(hour, min);
 
-  timer.setDate(time.getDate - TIME_BEFOR_TASK.D);
-  timer.setHours(timer.getHours - TIME_BEFOR_TASK.H);
-  timer.setMinutes(timer.getMinutes() - TIME_BEFOR_TASK.M);
+  //timer.setDate(time.getDate - TIME_BEFOR_TASK.D);
+  //timer.setHours(timer.getHours - TIME_BEFOR_TASK.H);
+  timer.setMinutes(timer.getMinutes() - 2);
 
   let job = null;
   if (item.remindSet == false) {
